@@ -1,6 +1,6 @@
 # Matrix-Library
 A library of basic matrix operations implemented using only standard library functions. 
-Currently supports initialization using the C++ guidelines of the Rule of Five, as 
+Currently supports initialization using the C++ guidelines of the Rule of Five, as well as 
 matrix multiplication and transpose operations.
 
 ## Basic Build Instructions
