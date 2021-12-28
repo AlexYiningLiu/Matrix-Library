@@ -5,16 +5,22 @@
  * @date 2021-12
  */
 
-#ifndef MATRIXLIBRARY_HPP
-#define MATRIXLIBRARY_HPP
+#ifndef MATRIX_LIBRARY_HPP
+#define MATRIX_LIBRARY_HPP
 
 #include <vector>
 #include <iostream>
 #include <cassert>
 #include <iomanip>
+#include <utility>
+#include <stdexcept>
+#include "concurrency_utils.hpp"
 
 namespace MatrixLibrary
 {
+    // Number of threads to use for matrix computations, set as a static variable of the namespace
+    static size_t n_threads = 1;
+
     template <typename TData>
     class Matrix
     {
@@ -22,11 +28,9 @@ namespace MatrixLibrary
         /**
          * Default constructor.
          */
-        Matrix() 
+        Matrix() : m_rows(0), m_cols(0)
         {
             std::cout << "Default Constructor called" << std::endl;
-            m_rows = 0;
-            m_cols = 0;
         }
 
         /**
@@ -36,6 +40,10 @@ namespace MatrixLibrary
          */
         Matrix(const size_t rows, const size_t cols): m_rows(rows), m_cols(cols), m_data(rows, std::vector<TData>(cols))
         {
+            if (rows <= 0 || cols <= 0)
+            {
+                throw std::invalid_argument("Row and column must be positive integers");
+            }
             std::cout << "Dimensions-only Constructor called" << std::endl;
         }
         
@@ -112,22 +120,34 @@ namespace MatrixLibrary
          * @param mat The other Matrix to multiply with
          * @return A new Matrix holding the result
          */
-        Matrix operator*(const Matrix &mat) const
+        virtual Matrix operator*(const Matrix &mat) const
         {
             assert(m_cols == mat.m_rows && "First matrix's cols must match second matrix's rows");
 
             std::vector<std::vector<TData>> r_data(m_rows, std::vector<TData>(mat.m_cols));
 
-            for (size_t i = 0; i < m_rows; ++i)
+            // Serial computation, no multithreading
+            if (n_threads == 1)
             {
-                for (size_t j = 0; j < mat.m_cols; ++j)
+                std::cout << "Multiplying without multithreading" << "\n";
+                for (size_t i = 0; i < m_rows; ++i)
                 {
-                    for (size_t k = 0; k < m_cols; ++k)
+                    for (size_t j = 0; j < mat.m_cols; ++j)
                     {
-                        r_data[i][j] += m_data[i][k] * mat.m_data[k][j];
+                        for (size_t k = 0; k < m_cols; ++k)
+                        {
+                            r_data[i][j] += m_data[i][k] * mat.m_data[k][j];
+                        }
                     }
                 }
             }
+            // Employ multithreaded computation
+            else
+            {
+                std::cout << "Multiplying with multithreading" << "\n";
+                multiplyMatricesAsync(r_data, m_data, mat.m_data, n_threads);
+            }
+
             Matrix<TData> r(r_data);
             return r;
         }
@@ -210,7 +230,7 @@ namespace MatrixLibrary
          * Instantiates a new Matrix which contains the result of transposing the current Matrix.
          * @return A new matrix holding the transpose
          */
-        Matrix transpose() const
+        virtual Matrix transpose() const
         {
             std::vector<std::vector<TData>> r_data(m_cols, std::vector<TData>(m_rows));
             
@@ -244,18 +264,35 @@ namespace MatrixLibrary
             std::cout << std::endl;
         }
 
-    private:
+        /**
+         * Getter for the dimensions of the matrix, returned as a pair in the form of rows, cols
+         * 
+         * @return std::pair <size_t, size_t>
+         */
+        std::pair<size_t, size_t> getDimensions() const
+        {
+            std::pair<size_t, size_t> dim;
+            dim.first = m_rows;
+            dim.second = m_cols;
+            return dim;
+        }
+
+    protected:
         std::vector<std::vector<TData>> m_data;
         size_t m_rows;
         size_t m_cols;
     };
 
-	template class Matrix<int>;
+    static void setNumThreads(const size_t n_threads_)
+    {
+        n_threads = n_threads_;
+    }
+
+    template class Matrix<int>;
     template class Matrix<double>;
 	template class Matrix<float>;
 	template class Matrix<long>;
     template class Matrix<short>;
-
 } // end namespace MatrixLibrary
 
-#endif // #ifndef Matrix_HPP
+#endif // #ifndef MATRIX_LIBRARY_HPP

@@ -1,11 +1,12 @@
 #include "matrix_library.hpp"
+#include "identity_matrix.hpp"
 #include <vector>
 #include <string>
 #include <iostream>
 
 using namespace MatrixLibrary;
 
-int main()
+void testCases()
 {
     std::cout << "Test default constructor." << "\n";
     Matrix<int> mat_default;
@@ -79,4 +80,24 @@ int main()
     std::cout << "Test subtraction." << "\n";
     auto mat_diff = identity - identity;
     mat_diff.printData();
+
+    std::cout << "Test identity matrix class." << "\n";
+    auto mat_id = IdentityMatrix<int> (3);
+    mat_id.printData();
+
+    std::cout << "Test identity matrix transpose." << "\n";
+    mat_id.transpose().printData();
+
+    std::cout << "Test identity matrix multiplication." << "\n";
+    Matrix<int> mat_id_mult({{2, 9, 4},
+                            {0, 0, 2},
+                            {0, 1, 1}});
+    (mat_id * mat_id_mult).printData();
+}
+
+int main()
+{
+    size_t n_threads = 4;
+    setNumThreads(n_threads);
+    testCases();
 }
