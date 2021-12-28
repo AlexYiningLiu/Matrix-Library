@@ -138,8 +138,71 @@ namespace MatrixLibrary
          */
         Matrix &operator*=(const Matrix &mat)
         {
-            assert(m_cols == mat.m_rows && "First matrix's cols must match second matrix's rows");
             *this = std::move((*this) * mat);
+            return *this;
+        }
+
+        /**
+        * Overloaded + operator, each Matrix operand must have the same datatype, or else the compiler will fail.
+        * @param mat The other Matrix to add with
+        * @return A new Matrix holding the result
+        */
+        Matrix operator+(const Matrix& mat) const
+        {
+            assert(m_cols == mat.m_cols && m_rows == mat.m_rows && "Two matrices must have the same dimensions");
+
+            std::vector<std::vector<TData>> r_data(m_rows, std::vector<TData>(m_cols));
+
+            for (size_t i = 0; i < m_rows; ++i)
+            {
+                for (size_t j = 0; j < mat.m_cols; ++j)
+                {                    
+                    r_data[i][j] += (m_data[i][j] + mat.m_data[i][j]);
+                }
+            }
+            Matrix<TData> r(r_data);
+            return r;
+        }
+
+        /**
+         * Overloaded += operator, each Matrix operand must have the same datatype, or else the compiler will fail.
+         * @param mat The other Matrix to add with
+         */
+        Matrix& operator+=(const Matrix& mat)
+        {
+            *this = std::move((*this) + mat);
+            return *this;
+        }
+
+        /**
+        * Overloaded - operator, each Matrix operand must have the same datatype, or else the compiler will fail.
+        * @param mat The other Matrix that will be subtracted from the current
+        * @return A new Matrix holding the result
+        */
+        Matrix operator-(const Matrix& mat) const
+        {
+            assert(m_cols == mat.m_cols && m_rows == mat.m_rows && "Two matrices must have the same dimensions");
+
+            std::vector<std::vector<TData>> r_data(m_rows, std::vector<TData>(m_cols));
+
+            for (size_t i = 0; i < m_rows; ++i)
+            {
+                for (size_t j = 0; j < mat.m_cols; ++j)
+                {
+                    r_data[i][j] += (m_data[i][j] - mat.m_data[i][j]);
+                }
+            }
+            Matrix<TData> r(r_data);
+            return r;
+        }
+
+        /**
+         * Overloaded -= operator, each Matrix operand must have the same datatype, or else the compiler will fail.
+         * @param mat The other Matrix to subtract with
+         */
+        Matrix& operator-=(const Matrix& mat)
+        {
+            *this = std::move((*this) - mat);
             return *this;
         }
 
@@ -191,8 +254,7 @@ namespace MatrixLibrary
     template class Matrix<double>;
 	template class Matrix<float>;
 	template class Matrix<long>;
-	template class Matrix<short>;
-	template class Matrix<unsigned>;
+    template class Matrix<short>;
 
 } // end namespace MatrixLibrary
 

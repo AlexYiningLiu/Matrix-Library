@@ -71,4 +71,12 @@ int main()
     std::cout << "Test transpose." << "\n";
     auto mat_trans = mat_mod.transpose();
     mat_trans.printData();
+
+    std::cout << "Test addition." << "\n";
+    auto mat_sum = identity + identity;
+    mat_sum.printData();
+
+    std::cout << "Test subtraction." << "\n";
+    auto mat_diff = identity - identity;
+    mat_diff.printData();
 }
