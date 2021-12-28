@@ -1,9 +1,13 @@
 cmake_minimum_required(VERSION 3.11.3)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 project(MatrixLibrary)
 
 file(GLOB project_SRCS src/*.cpp)
+file(GLOB project_HEADERS include/*.hpp)
 
-add_executable(matrixLib ${project_SRCS})
+set(SOURCES ${project_SRCS} ${project_HEADERS})
+
+add_executable(matrixLib ${SOURCES})
+target_include_directories(matrixLib PRIVATE include)
