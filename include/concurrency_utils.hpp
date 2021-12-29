@@ -12,9 +12,14 @@
 #include <future>
 #include <vector>
 #include <algorithm>
+#include <iostream>
+#include <mutex>
 
 namespace MatrixLibrary
 {
+    // Mutex used to protect cout for all threads started by multiplyMatricesAsync
+    static std::mutex mtx_static;
+
     /**
      * Compute certain elements of the multiplication result based on given parameters 
      * 
@@ -31,6 +36,8 @@ namespace MatrixLibrary
     void computeGivenRows(std::vector<std::vector<TData>> &result, const size_t starting_row, const size_t rows_per_thread, 
         const std::vector<std::vector<TData>> &data1, const std::vector<std::vector<TData>> &data2, size_t cols1, size_t cols2)
     {
+        std::unique_lock<std::mutex> uLock(mtx_static, std::defer_lock);
+
         const size_t ending_row = starting_row + rows_per_thread;
         for (size_t i = starting_row; i < ending_row; ++i)
         {
@@ -42,6 +49,8 @@ namespace MatrixLibrary
                 }
             }
         }
+        uLock.lock();
+        // std::cout << "Row " << ending_row << " finished computing" << "\n";
     }
 
     /**

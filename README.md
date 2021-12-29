@@ -10,8 +10,10 @@ e.g. an integer Matrix and a double Matrix.
 - Matrix representation is in the form of a vector of vectors. This could potentially be further optimized
 to only use a 1D data structure along with a stride, which can improve time complexity involved in operations.
 
-## Basic Build Instructions
+## Build Instructions
 1. Clone this repo.
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./matrixLib`.
+
+## Running Instructions
+- `.\matrixLib <num_threads> <type> <rows> <cols>`

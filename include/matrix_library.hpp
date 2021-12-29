@@ -20,6 +20,7 @@ namespace MatrixLibrary
 {
     // Number of threads to use for matrix computations, set as a static variable of the namespace
     static size_t n_threads = 1;
+    static bool printMemoryInfo = false;
 
     template <typename TData>
     class Matrix
@@ -30,7 +31,10 @@ namespace MatrixLibrary
          */
         Matrix() : m_rows(0), m_cols(0)
         {
-            std::cout << "Default Constructor called" << std::endl;
+            if (printMemoryInfo)
+            {
+                std::cout << "Default Constructor called" << std::endl;
+            }
         }
 
         /**
@@ -44,7 +48,10 @@ namespace MatrixLibrary
             {
                 throw std::invalid_argument("Row and column must be positive integers");
             }
-            std::cout << "Dimensions-only Constructor called" << std::endl;
+            if (printMemoryInfo)
+            {
+                std::cout << "Dimensions-only Constructor called" << std::endl;
+            }
         }
         
         /**
@@ -54,7 +61,6 @@ namespace MatrixLibrary
         Matrix(const std::vector<std::vector<TData>>& data): 
             m_rows(data.size()), m_cols(data.front().size()), m_data(data)
         {
-            std::cout << "Constructor with data called" << std::endl;
             // Assert that the input data type is numeric
             static_assert(std::is_arithmetic<TData>::value, "TData must be numeric");
 
@@ -64,6 +70,11 @@ namespace MatrixLibrary
             {
                 assert(m_data[i].size() == m_cols && "Each row must have the same size");
             }
+
+            if (printMemoryInfo)
+            {
+                std::cout << "Constructor with data called" << std::endl;
+            }
         }
 
         /**
@@ -72,7 +83,10 @@ namespace MatrixLibrary
          */
         Matrix(const Matrix &source): m_rows(source.m_rows), m_cols(source.m_cols), m_data(source.m_data)
         {
-            std::cout << "Copy Constructor called" << std::endl;
+            if (printMemoryInfo)
+            {
+                std::cout << "Copy Constructor called" << std::endl;
+            }
         }
 
         /**
@@ -81,8 +95,11 @@ namespace MatrixLibrary
          */
         Matrix(Matrix &&source): m_rows(source.m_rows), m_cols(source.m_cols)
         {
-            std::cout << "Move Constructor called" << std::endl;
             m_data = std::move(source.m_data);
+            if (printMemoryInfo)
+            {
+                std::cout << "Move Constructor called" << std::endl;
+            }
         }
 
         /**
@@ -91,10 +108,15 @@ namespace MatrixLibrary
          */
         Matrix &operator=(const Matrix &source)
         {
-            std::cout << "Copy Assignment Operator called" << std::endl;
             m_rows = source.m_rows;
             m_cols = source.m_cols;
             m_data = source.m_data;
+
+            if (printMemoryInfo)
+            {
+                std::cout << "Copy Assignment Operator called" << std::endl;
+            }
+
             return *this;
         }
 
@@ -103,8 +125,7 @@ namespace MatrixLibrary
          * 
          */
         Matrix &operator=(Matrix &&source)
-        {            
-            std::cout << "Move assignment operator called" << std::endl;
+        {
             if (this == &source)
             {
                 return *this;
@@ -112,6 +133,12 @@ namespace MatrixLibrary
             m_rows = source.m_rows;
             m_cols = source.m_cols;
             m_data = std::move(source.m_data);
+
+            if (printMemoryInfo)
+            {
+                std::cout << "Move assignment operator called" << std::endl;
+            }
+
             return *this;
         }
 
@@ -129,7 +156,7 @@ namespace MatrixLibrary
             // Serial computation, no multithreading
             if (n_threads == 1)
             {
-                std::cout << "Multiplying without multithreading" << "\n";
+                std::cout << "Multiplying without multithreading..." << "\n";
                 for (size_t i = 0; i < m_rows; ++i)
                 {
                     for (size_t j = 0; j < mat.m_cols; ++j)
@@ -144,7 +171,7 @@ namespace MatrixLibrary
             // Employ multithreaded computation
             else
             {
-                std::cout << "Multiplying with multithreading" << "\n";
+                std::cout << "Multiplying with multithreading..." << "\n";
                 multiplyMatricesAsync(r_data, m_data, mat.m_data, n_threads);
             }
 
@@ -286,6 +313,11 @@ namespace MatrixLibrary
     static void setNumThreads(const size_t n_threads_)
     {
         n_threads = n_threads_;
+    }
+
+    static void setPrintMemoryInfo(const bool printMemoryInfo_)
+    {
+        printMemoryInfo = printMemoryInfo_;
     }
 
     template class Matrix<int>;
