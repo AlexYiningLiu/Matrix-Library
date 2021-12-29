@@ -1,6 +1,6 @@
 # Matrix-Library
 
-Capstone project for the Udacity C++ Nanodegree.
+Capstone project for the [Udacity C++ Nanodegree](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213).
 
 ##### Table of Contents 
 - [Description](#description)
@@ -52,6 +52,8 @@ Example command line input: `./matrixLib 3 i 50 40` will run a timed multiplicat
 and its own transpose using 3 threads. It will also run the same calculation using a single thread, and the computations will be outputted.
 
 Example command line input: `./matrixLib` will run a series of small tests which covers all the included functionalities of the Matrix class.
+
+![alt text](https://github.com/AlexYiningLiu/Matrix-Library/blob/master/img/sample_command_line.PNG?raw=true)
 
 ## Current Limitations
 - Does not support operations between Matrix objects instantitated using different types,
