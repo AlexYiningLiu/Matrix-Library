@@ -30,6 +30,9 @@ to handle matrix multiplication either synchronously or asynchronously using mul
 ### `main.cpp`
 [main.cpp](src/main.cpp) contains driver code that processes user command line arguments, and runs one of two different test functions
 
+### `test_cases.cpp`
+[test_cases.cpp](test/test_cases.cpp) contains unit testing code that runs a series of matrix operations and verifies their correctness
+
 ## Build Instructions
 1. Clone this repo.
 2. Make a build directory in the top level directory: `mkdir build && cd build`
@@ -54,6 +57,11 @@ and its own transpose using 3 threads. It will also run the same calculation usi
 Example command line input: `./matrixLib` will run a series of small tests which covers all the included functionalities of the Matrix class.
 
 ![alt text](https://github.com/AlexYiningLiu/Matrix-Library/blob/master/img/sample_command_line.PNG?raw=true)
+
+To run the unit tests:
+1. `cd build/test/bin`
+2. `./TestCases`
+The unit test results will be displayed in terminal.
 
 ## Current Limitations
 - Does not support operations between Matrix objects instantitated using different types,
