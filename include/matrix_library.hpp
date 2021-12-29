@@ -171,7 +171,7 @@ namespace MatrixLibrary
             // Employ multithreaded computation
             else
             {
-                std::cout << "Multiplying with multithreading..." << "\n";
+                std::cout << "Multiplying with multithreading using " << n_threads << " threads ..." << "\n";
                 multiplyMatricesAsync(r_data, m_data, mat.m_data, n_threads);
             }
 
@@ -302,6 +302,16 @@ namespace MatrixLibrary
             dim.first = m_rows;
             dim.second = m_cols;
             return dim;
+        }
+
+        /**
+         * Get a reference to the underlying data of the Matrix
+         * 
+         * @return std::vector<std::vector<TData>>& 
+         */
+        std::vector<std::vector<TData>> &getData()
+        {
+            return m_data;
         }
 
     protected:

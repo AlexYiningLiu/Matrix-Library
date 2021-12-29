@@ -28,11 +28,15 @@ namespace MatrixLibrary
             {
                 throw std::invalid_argument("Dimension must be positive integer");
             }
-            std::cout << "Identity Dimensions-only Constructor called" << std::endl;
 
             for (size_t i = 0; i < size; ++i)
             {
                 this->m_data[i][i] = (TData) 1.0;
+            }
+
+            if (printMemoryInfo)
+            {
+                std::cout << "Identity Dimensions-only Constructor called" << std::endl;
             }
         }
 
