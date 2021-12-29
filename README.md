@@ -31,7 +31,7 @@ to handle matrix multiplication either synchronously or asynchronously using mul
 [main.cpp](src/main.cpp) contains driver code that processes user command line arguments, and runs one of two different test functions
 
 ### `test_cases.cpp`
-[test_cases.cpp](test/test_cases.cpp) contains unit testing code that runs a series of matrix operations and verifies their correctness
+[test_cases.cpp](test/test_cases.cpp) contains unit testing code that runs a series of matrix operations and verifies their correctness, using GoogleTest framework
 
 ## Build Instructions
 1. Clone this repo.
@@ -61,6 +61,7 @@ Example command line input: `./matrixLib` will run a series of small tests which
 To run the unit tests:
 1. `cd build/test/bin`
 2. `./TestCases`
+
 The unit test results will be displayed in terminal.
 
 ## Current Limitations
