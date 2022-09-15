@@ -6,7 +6,6 @@
 - [Build Instructions](#build-instructions)
 - [Running Instructions](#running-instructions)
 - [Current Limitations](#current-limitations)
-- [Rubric Points](#rubric-points)
 
 ## Description
 A library of basic matrix operations implemented using only standard library functions. 
